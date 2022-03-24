@@ -10,7 +10,6 @@ import { CPToken } from "../typechain";
 chai.use(solidity);
 
 describe("CPTokenTest", function () {
-  const [wallet, walletTo] = new MockProvider().getWallets()
   let cptoken: CPToken;
   
   let signers: SignerWithAddress[];
@@ -33,6 +32,7 @@ describe("CPTokenTest", function () {
     await cptoken.deployed();
     await cptoken.initialize("CPToken","CPT")
   });
+
   it("Simple test...", async function () {
     const name = await cptoken.name();
     const symbol = await cptoken.symbol();
@@ -41,5 +41,45 @@ describe("CPTokenTest", function () {
     expect(symbol).to.be.equal( 'CPT');
     expect(decimals).to.be.equal(18);
 
+  })
+  it("mint test...", async function(){
+    
+    await cptoken.mint(acc1.address,1000);
+    await cptoken.mint(acc2.address,100000);
+
+    await expect(cptoken.connect(acc2).mint(acc3.address, '1000', { from: acc2.address })).to.be.revertedWith(
+      'Ownable: caller is not the owner',
+    );
+    const totalSupply = await cptoken.totalSupply();
+    const acc1Bal = await cptoken.balanceOf(acc1.address);
+    const acc2Bal = await cptoken.balanceOf(acc2.address);
+    const acc3Bal = await cptoken.balanceOf(acc3.address);
+    expect(totalSupply).to.equal('1100');
+    expect(acc1Bal).to.equal('100');
+    expect(acc2Bal).to.equal('1000');
+    expect(acc3Bal).to.equal('0');
+    
+
+
+  })
+
+  it("totalSupply test...", async function(){
+
+  })
+
+  it("balanceOf test...", async function(){
+    
+  })
+
+  it("transfer test...", async function(){
+    
+  })
+
+  it("approve test...", async function(){
+    
+  })
+
+  it("allowance test...", async function(){
+    
   })
 });

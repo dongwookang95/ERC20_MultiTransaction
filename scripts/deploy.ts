@@ -1,13 +1,13 @@
 
-import { ethers } from "hardhat";
+import { ethers, upgrades } from "hardhat";
 
 async function main() {
   const CPToken = await ethers.getContractFactory("CPToken");
-  const cpToken = await CPToken.deploy("Hello, Hardhat!");
+  const cpToken = await upgrades.deployProxy(CPToken, ["CPToken","CPT"]);
 
   await cpToken.deployed();
 
-  console.log("Greeter deployed to:", cpToken.address);
+  console.log("CPToken deployed to:", cpToken.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

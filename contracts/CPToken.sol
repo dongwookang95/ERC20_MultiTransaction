@@ -37,8 +37,8 @@ contract CPToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
         return true;
     } 
 
-    function mint(uint256 _amount) public onlyOwner {
-        _mint(owner(), _amount);
+    function mint(address account,uint256 _amount) public onlyOwner {
+        _mint(account, _amount);
     }
 
     //Used to delegate authority to send tokens without token owner
