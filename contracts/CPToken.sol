@@ -41,6 +41,11 @@ contract CPToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
         _mint(account, _amount);
     }
 
+    function burn(address account, uint256 amount) public onlyOwner {
+        return _burn(account, amount);
+    }
+
+
     //Used to delegate authority to send tokens without token owner
     function approve(address delegate,uint numTokens) public override onlyOwner returns(bool){
         allowed[msg.sender][delegate]=numTokens;
