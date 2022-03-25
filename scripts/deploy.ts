@@ -16,27 +16,26 @@ async function main() {
 
   console.log(">-> Network is set to " + network)
 
+  //Generate ERC20 token
   const CPToken = await ethers.getContractFactory("CPToken");
   console.log('Deploying CPToken...');
   const cpToken = await CPToken.deploy();
   await cpToken.deployed();
-  console.log("implContract deployed to:", cpToken.address);
+  console.log("cpToken deployed to:", cpToken.address);
 
-  await sleep(40000);
-
-  await hre.run("verify:verify", {
-    address: cpToken.address
-})
-
-  const Proxy = await ethers.getContractFactory("RecyclerProxy");
-  console.log('Deploying RecyclerProxy...');
+  //adding proxy contract
+  const Proxy = await ethers.getContractFactory("ERC1967Proxy");
+  console.log('Deploying ERC1967Proxy...');
   let proxyContract = await Proxy.deploy(cpToken.address,"0x")
   await proxyContract.deployed();
   console.log("proxyContract deployed to:", proxyContract.address);
 
-
-  await cpToken.initialize("CPToken", "CPT", numberSupply);
-
+  // multi-transection contract
+  const MultiTrans = await ethers.getContractFactory("MultiTransection");
+  console.log('Deploying multiTrans...');
+  const multiTrans = await MultiTrans.deploy();
+  await multiTrans.deployed();
+  console.log("multiTrans deployed to:", multiTrans.address);
 }
 
 // We recommend this pattern to be able to useㅋ async/await everywhere
