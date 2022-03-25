@@ -8,47 +8,36 @@ type TransectionInfo ={
     amount : number;
 }
 
-
-
-
-
-
 function _transection(_receiverAddress, _amount){
-const NETWORK = process.env.RINKEBY_URL;
-const PRIVATE_KEY = process.env.PRIVATE_KEY;
-let provider = ethers.getDefaultProvider(NETWORK)
-let privateKey = PRIVATE_KEY
+    const NETWORK = process.env.RINKEBY_URL;
+    const PRIVATE_KEY = process.env.PRIVATE_KEY;
+    let provider = ethers.getDefaultProvider(NETWORK)
+    let privateKey = PRIVATE_KEY
 
-// Create a wallet instance
-let wallet = new ethers.Wallet(privateKey, provider)
-// Create a transaction object
-let tx = {
-    to: _receiverAddress,
-    // Convert currency unit from ether to wei
-    value: _amount
-}
-
-wallet.sendTransaction(tx)
-.then((txObj) => {
+    // Create a wallet instance
+    let wallet = new ethers.Wallet(privateKey, provider)
+    // Create a transaction object
+    let tx = {
+        to: _receiverAddress,
+        value: _amount
+    }
+    wallet.sendTransaction(tx)
+    .then((txObj) => {
     console.log('txHash', txObj.hash)
-})
+    })
 }
 
-
-function _getTransectionData(){
+function executeTransection(){
     const headers = ['address', 'amount']
-
     const csvFilePath = path.resolve(__dirname,'example.csv');
+    const transectionRecord:TransectionInfo[] = [];
 
-    const fileContent = fs.readFileSync(csvFilePath, { encoding:'utf-8'});
-
-    parse(fileContent, {
-        delimiter: ',',
-        columns: headers,
-    }, (error, result: TransectionInfo[]) => {
-        if (error) {
-        console.error(error);
+    fs.createReadStream(csvFilePath)
+    .pipe(parse({columns: headers}))
+    .on('data',(data) => transectionRecord.push(data))
+    .on('end', ()=>{
+        for(var i = 0; i<transectionRecord.length; i++){
+            _transection(transectionRecord[i].address,transectionRecord[i].amount);
         }
-        console.log("result",result);
-    });
+    })
 };
