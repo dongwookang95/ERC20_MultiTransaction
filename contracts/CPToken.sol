@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.2;
 
 import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
@@ -12,9 +12,11 @@ contract CPToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
     mapping(address=>uint) public balances;
     mapping(address=>mapping(address=>uint)) public allowed;
 
-    function initialize(string memory name, string memory symbol) public virtual initializer {
+    function initialize(string memory name, string memory symbol, uint256 initialSupply) public virtual initializer {
+        __Context_init();
         __Ownable_init_unchained();
         __ERC20_init(name, symbol);
+        _mint(_msgSender(),initialSupply);
     }
     
 
@@ -22,6 +24,7 @@ contract CPToken is Initializable, ERC20Upgradeable, OwnableUpgradeable {
     function totalSupply() public override view returns(uint256){
         return supply;
     } 
+
 
     // It returns how many tokens does this person have
     function balanceOf(address tokenOwner) public override view returns(uint){

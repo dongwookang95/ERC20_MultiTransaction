@@ -1,6 +1,7 @@
 
 import { ethers, upgrades } from "hardhat";
 import hre from "hardhat"
+import { BigNumber } from "ethers";
 
 
 function sleep(ms:number) {
@@ -10,24 +11,35 @@ function sleep(ms:number) {
 }
 
 async function main() {
-  const CPToken = await ethers.getContractFactory("CPToken");
-
+  const numberSupply = BigNumber.from(10).pow(20);
   let network = process.env.NETWORK ? process.env.NETWORK : "rinkeby"
 
   console.log(">-> Network is set to " + network)
-  const cpToken = await upgrades.deployProxy(CPToken, ["CPToken","CPT"]);
-  await cpToken.deployed();
 
-  console.log("CPToken deployed to:", cpToken.address);
+  const CPToken = await ethers.getContractFactory("CPToken");
+  console.log('Deploying CPToken...');
+  const cpToken = await CPToken.deploy();
+  await cpToken.deployed();
+  console.log("implContract deployed to:", cpToken.address);
 
   await sleep(40000);
 
   await hre.run("verify:verify", {
     address: cpToken.address
 })
+
+  const Proxy = await ethers.getContractFactory("RecyclerProxy");
+  console.log('Deploying RecyclerProxy...');
+  let proxyContract = await Proxy.deploy(cpToken.address,"0x")
+  await proxyContract.deployed();
+  console.log("proxyContract deployed to:", proxyContract.address);
+
+
+  await cpToken.initialize("CPToken", "CPT", numberSupply);
+
 }
 
-// We recommend this pattern to be able to use async/await everywhere
+// We recommend this pattern to be able to useㅋ async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
   console.error(error);
