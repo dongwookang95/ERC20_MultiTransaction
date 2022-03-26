@@ -18,9 +18,7 @@ contract MultiTransection is Initializable{
                             uint256[] calldata _amount) 
                             external 
                             { 
-    uint i = 0;
-
-    for(i; i < _addresses.length; i++){
+    for(uint i=0; i < _addresses.length; i++){
         _token.transferFrom(msg.sender, _addresses[i], _amount[i]);
     }
     }
