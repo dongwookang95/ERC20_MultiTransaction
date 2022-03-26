@@ -36,9 +36,17 @@ async function main() {
   const multiTrans = await MultiTrans.deploy();
   await multiTrans.deployed();
   console.log("multiTrans deployed to:", multiTrans.address);
+
+  // await sleep(40000);
+  // // await hre.run("verify:verify", {
+  // //     address: cpToken.address
+  // // })
+  // await hre.run("verify:verify",{
+  //     address: multiTrans.address
+  // })
 }
 
-// We recommend this pattern to be able to useㅋ async/await everywhere
+// We recommend this pattern to be able to use async/await everywhere
 // and properly handle errors.
 main().catch((error) => {
   console.error(error);

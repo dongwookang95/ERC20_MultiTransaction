@@ -1,11 +1,9 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
-import { ethers, upgrades } from 'hardhat';
-import { expect, use } from "chai";
+import { ethers } from 'hardhat';
+import { expect } from "chai";
 import chai from "chai"
-import { Contract } from "ethers";
-import { deployContract, MockProvider, solidity } from "ethereum-waffle";
-
-import { CPToken,MultiTransection } from "../typechain";
+import { solidity } from "ethereum-waffle";
+import { CPToken, MultiTransection } from "../typechain";
 
 chai.use(solidity);
 
@@ -102,7 +100,6 @@ describe("CPTokenTest", function () {
     expect(acc2Val, '0');
     expect(acc3Val, '0');
 
-    console.log("THis : ", multiTrans.address);
     await cptoken.approve(multiTrans.address, 10000000);
 
     await multiTrans.multiTransfer(cptoken.address,accArray, amountArray);
