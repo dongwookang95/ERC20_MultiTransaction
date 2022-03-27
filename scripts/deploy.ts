@@ -1,7 +1,6 @@
 
-import { ethers, upgrades } from "hardhat";
+import { ethers } from "hardhat";
 import hre from "hardhat"
-import { BigNumber } from "ethers";
 
 
 function sleep(ms:number) {
@@ -11,7 +10,6 @@ function sleep(ms:number) {
 }
 
 async function main() {
-  const numberSupply = BigNumber.from(10).pow(20);
   let network = process.env.NETWORK ? process.env.NETWORK : "rinkeby"
 
   console.log(">-> Network is set to " + network)
@@ -37,10 +35,12 @@ async function main() {
   await multiTrans.deployed();
   console.log("multiTrans deployed to:", multiTrans.address);
 
+  // sleep is required as 
   // await sleep(40000);
-  // // await hre.run("verify:verify", {
-  // //     address: cpToken.address
-  // // })
+  // await hre.run("verify:verify", {
+  //     address: cpToken.address
+  // })
+  // await sleep(40000);
   // await hre.run("verify:verify",{
   //     address: multiTrans.address
   // })

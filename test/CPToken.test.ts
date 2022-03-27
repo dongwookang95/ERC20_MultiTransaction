@@ -23,16 +23,12 @@ describe("CPTokenTest", function () {
     acc1 = signers[0];
     acc2 = signers[1];
     acc3 = signers[2];
-    
   });
 
   beforeEach(async function(){
     cptoken = await this.CPToken.deploy();
     multiTrans = await this.multiTransection.deploy();
     await multiTrans.deployed();
-  
-    
-    // this.cptoken = await upgrades.deployProxy(await ethers.getContractFactory("CPToken"));
     await cptoken.deployed();
   });
 
@@ -60,6 +56,7 @@ describe("CPTokenTest", function () {
     expect(acc2Bal).to.equal('1000');
     expect(acc3Bal).to.equal('0');
   })
+
   it('should supply token transfers properly', async function () {
     await cptoken.mint(acc1.address, '100');
     await cptoken.mint(acc2.address, '1000');
@@ -99,16 +96,14 @@ describe("CPTokenTest", function () {
     expect(acc1Val, '10000000');
     expect(acc2Val, '0');
     expect(acc3Val, '0');
+    
     const amountApprove:BigNumber = BigNumber.from(10).pow(18);
     await cptoken.approve(multiTrans.address, amountApprove);
-    
-
     await multiTrans.multiTransfer(cptoken.address,accArray, amountArray);
     acc2Val = await cptoken.balanceOf(acc2.address);
     acc3Val = await cptoken.balanceOf(acc3.address);
 
     expect(acc2Val, '100');
     expect(acc3Val, '200');
-
   })
 });
