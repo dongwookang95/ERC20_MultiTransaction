@@ -1,5 +1,4 @@
 import { BigNumber, ethers } from 'ethers';
-import { parseUnits } from "@ethersproject/units";
 import fs from 'fs';
 import * as path from "path";
 import { parse } from 'csv-parse';
@@ -10,7 +9,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-type TransectionInfo ={
+type TransactionInfo ={
     address : string;
     amount : number;
 }
@@ -32,7 +31,7 @@ const tokenContract = new ethers.Contract(process.env.TOKEN_CONTRACT_ADDRESS as 
 function inputData(){
     const headers = ['address', 'amount']
     const csvFilePath = path.resolve(__dirname,'example.csv');
-    const transactionRecord:TransectionInfo[] = [];
+    const transactionRecord:TransactionInfo[] = [];
     const addressList:string[] =[];
     const amountList:BigNumber[] =[];
     
@@ -44,7 +43,6 @@ function inputData(){
         for(var i = 0; i<transactionRecord.length; i++){
             addressList.push(transactionRecord[i].address);     
             //conversion from string to bigNumber.            
-            
             //need to consider alternative way.
             let stringAmount = transactionRecord[i].amount;
             let dividor = 10000000000000000;
@@ -61,9 +59,7 @@ function _transaction(_receiverAddress:string[], _amount:BigNumber[]){
     const amountApprove:BigNumber = BigNumber.from(10).pow(21);
     const amountMint:BigNumber = BigNumber.from(15).pow(22);
     const gaslimit:BigNumber = BigNumber.from(217880);
-    // approve 
-    (async function(){
-        //currently full amount will be approved        
+    (async function(){        
         await tokenContract.mint(SIGNER.address, amountMint)
         const allowance = await tokenContract.allowance(SIGNER.address,
                                                         process.env.TRANSACTION_CONTRACT_ADDRESS,
