@@ -5,7 +5,7 @@ import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
 import  "./cptoken.sol";
 
 
-contract MultiTransection is Initializable, CPToken{ 
+contract MultiTransaction is Initializable, CPToken{ 
     event LogTokenBulkSent(address token, uint256 total);
     // solhint-disable-next-line
     // In order to upgrade in the future. 

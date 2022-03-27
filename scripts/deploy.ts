@@ -29,7 +29,7 @@ async function main() {
   console.log("proxyContract deployed to:", proxyContract.address);
 
   // multi-transection contract
-  const MultiTrans = await ethers.getContractFactory("MultiTransection");
+  const MultiTrans = await ethers.getContractFactory("MultiTransaction");
   console.log('Deploying multiTrans...');
   const multiTrans = await MultiTrans.deploy();
   await multiTrans.deployed();
