@@ -4,6 +4,7 @@ import { expect } from "chai";
 import chai from "chai"
 import { solidity } from "ethereum-waffle";
 import { CPToken, MultiTransection } from "../typechain";
+import { BigNumber } from "ethers";
 
 chai.use(solidity);
 
@@ -54,8 +55,8 @@ describe("CPTokenTest", function () {
     const acc1Bal = await cptoken.balanceOf(acc1.address);
     const acc2Bal = await cptoken.balanceOf(acc2.address);
     const acc3Bal = await cptoken.balanceOf(acc3.address);
-    expect(totalSupply).to.equal('11000');
-    expect(acc1Bal).to.equal('10000');
+    expect(totalSupply).to.equal('10000000000000000011000');
+    expect(acc1Bal).to.equal('10000000000000000010000');
     expect(acc2Bal).to.equal('1000');
     expect(acc3Bal).to.equal('0');
   })
@@ -78,7 +79,7 @@ describe("CPTokenTest", function () {
 
   it('should fail if you try to do bad transfers', async function () {
     await cptoken.mint(acc1.address, '100');
-    await expect(cptoken.transfer(acc3.address, '110')).to.be.revertedWith('ERC20: transfer amount exceeds balance');
+    await expect(cptoken.transfer(acc3.address, '10000000000000000001000110')).to.be.revertedWith('ERC20: transfer amount exceeds balance');
     await expect(cptoken.connect(acc2).transfer(acc3.address, '1', { from: acc2.address })).to.be.revertedWith(
       'ERC20: transfer amount exceeds balance',
     );
@@ -87,11 +88,10 @@ describe("CPTokenTest", function () {
   it("multiTransfer() should work", async function(){
     await cptoken.mint(acc1.address, '10000000');
 
-
     const accArray = [acc2.address, acc3.address];
-    const amountArray = [100,200]
+    const amountArray:BigNumber[] = [BigNumber.from(0x64),BigNumber.from(0xc8)];
     const totalSupply = await cptoken.totalSupply();
-    let cptVal = await cptoken.balanceOf(cptoken.address);
+
     let acc1Val = await cptoken.balanceOf(acc1.address);
     let acc2Val = await cptoken.balanceOf(acc2.address);
     let acc3Val = await cptoken.balanceOf(acc3.address);
@@ -99,8 +99,9 @@ describe("CPTokenTest", function () {
     expect(acc1Val, '10000000');
     expect(acc2Val, '0');
     expect(acc3Val, '0');
-
-    await cptoken.approve(multiTrans.address, 10000000);
+    const amountApprove:BigNumber = BigNumber.from(10).pow(18);
+    await cptoken.approve(multiTrans.address, amountApprove);
+    
 
     await multiTrans.multiTransfer(cptoken.address,accArray, amountArray);
     acc2Val = await cptoken.balanceOf(acc2.address);

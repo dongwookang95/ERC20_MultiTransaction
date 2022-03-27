@@ -2,24 +2,27 @@
 pragma solidity ^0.8.2;
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts/proxy/ERC1967/ERC1967Proxy.sol";
+import  "./cptoken.sol";
 
-interface IERC20 { 
-    function approve(address spender, uint256 amount) external returns (bool); 
-    function transferFrom(address sender,address recipient,uint256 amount) external returns (bool); 
-}
 
-contract MultiTransection is Initializable{ 
-    
+contract MultiTransection is Initializable, CPToken{ 
+    event LogTokenBulkSent(address token, uint256 total);
     // solhint-disable-next-line
     function initialize() public initializer {}
-
-    function multiTransfer(IERC20 _token, 
+    
+    function multiTransfer(address _token, 
                             address[] calldata _addresses,
                             uint256[] calldata _amount) 
-                            external 
+                            public
                             { 
-    for(uint i=0; i < _addresses.length; i++){
-        _token.transferFrom(msg.sender, _addresses[i], _amount[i]);
+    require(_addresses.length == _amount.length, "# of address != # of amounts");
+    require(_addresses.length <= 255, "preventing overflow");
+    uint sendAmount = _amount[0];
+    CPToken token = CPToken(_token);
+
+    for(uint i=1; i < _addresses.length; i++){
+        token.transferFrom(msg.sender, _addresses[i], _amount[i]);
     }
+    emit LogTokenBulkSent(_token, sendAmount);
     }
 }
