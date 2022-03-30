@@ -57,6 +57,10 @@ npm install
 ts-node client/transaction.ts
 ```
 
+테스트 코드 실행 
+```
+npx hardhat test
+```
 
 컨트렉트 코드 수정시 
 1. 현재 artifacts와 cache를 먼저 제거

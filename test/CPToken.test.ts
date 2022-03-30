@@ -3,14 +3,14 @@ import { ethers } from 'hardhat';
 import { expect } from "chai";
 import chai from "chai"
 import { solidity } from "ethereum-waffle";
-import { CPToken, MultiTransection } from "../typechain";
+import { CPToken, MultiTransaction } from "../typechain";
 import { BigNumber } from "ethers";
 
 chai.use(solidity);
 
 describe("CPTokenTest", function () {
   let cptoken: CPToken;
-  let multiTrans: MultiTransection;
+  let multiTrans: MultiTransaction;
   let signers: SignerWithAddress[];
   let acc1: SignerWithAddress;
   let acc2: SignerWithAddress;
@@ -18,7 +18,7 @@ describe("CPTokenTest", function () {
 
   before(async function () {
     this.CPToken = await ethers.getContractFactory('CPToken');
-    this.multiTransection = await ethers.getContractFactory('MultiTransection');
+    this.multiTransection = await ethers.getContractFactory('MultiTransaction');
     signers = await ethers.getSigners();
     acc1 = signers[0];
     acc2 = signers[1];
