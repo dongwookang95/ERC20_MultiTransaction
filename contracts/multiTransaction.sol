@@ -14,7 +14,7 @@ contract MultiTransaction is Initializable{
                             uint256[] calldata _amount) 
                             public { 
     require(_addresses.length == _amount.length, "# of address != # of amounts");
-    require(_addresses.length <= 255, "preventing overflow");
+    require(_addresses.length <= 255, "Wrong address format");
     uint sendAmount = _amount[0];
     CPToken token = CPToken(_token);
 
