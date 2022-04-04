@@ -4,7 +4,7 @@ import { expect } from "chai";
 import chai from "chai"
 import { solidity } from "ethereum-waffle";
 import { CPToken, MultiTransaction } from "../typechain";
-import { BigNumber } from "ethers";
+import { BigNumber,utils } from "ethers";
 
 chai.use(solidity);
 
@@ -18,7 +18,7 @@ describe("CPTokenTest", function () {
 
   before(async function () {
     this.CPToken = await ethers.getContractFactory('CPToken');
-    this.multiTransection = await ethers.getContractFactory('MultiTransaction');
+    this.multiTransaction = await ethers.getContractFactory('MultiTransaction');
     signers = await ethers.getSigners();
     acc1 = signers[0];
     acc2 = signers[1];
@@ -27,12 +27,12 @@ describe("CPTokenTest", function () {
 
   beforeEach(async function(){
     cptoken = await this.CPToken.deploy();
-    multiTrans = await this.multiTransection.deploy();
+    multiTrans = await this.multiTransaction.deploy();
     await multiTrans.deployed();
     await cptoken.deployed();
   });
 
-  it('should have correct name and symbol and decimal', async function () {
+  it("should have correct name and symbol and decimal", async function () {
     const name = await cptoken.name();
     const symbol = await cptoken.symbol();
     const decimals = await cptoken.decimals();
@@ -57,7 +57,7 @@ describe("CPTokenTest", function () {
     expect(acc3Bal).to.equal('0');
   })
 
-  it('should supply token transfers properly', async function () {
+  it("should supply token transfers properly", async function () {
     await cptoken.mint(acc1.address, '100');
     await cptoken.mint(acc2.address, '1000');
     await cptoken.transfer(acc3.address, '10');
@@ -74,7 +74,7 @@ describe("CPTokenTest", function () {
     expect(acc3Bal, '110');
   });
 
-  it('should fail if you try to do bad transfers', async function () {
+  it("should fail if you try to do bad transfers", async function () {
     await cptoken.mint(acc1.address, '100');
     await expect(cptoken.transfer(acc3.address, '10000000000000000001000110')).to.be.revertedWith('ERC20: transfer amount exceeds balance');
     await expect(cptoken.connect(acc2).transfer(acc3.address, '1', { from: acc2.address })).to.be.revertedWith(
@@ -105,5 +105,15 @@ describe("CPTokenTest", function () {
 
     expect(acc2Val, '100');
     expect(acc3Val, '200');
+  })
+
+  //From here, all are added after submission. 
+  it("Should fail if address.length != amount.length", async function(){
+    let amountMint = utils.parseEther("100000.0")
+    await cptoken.mint(acc1.address, amountMint);
+    const accArray = [acc2.address,acc3.address];
+    const amtArray:BigNumber[] = [BigNumber.from('100000')]
+    await expect( multiTrans.multiTransfer(cptoken.address,accArray, amtArray)).to.be.revertedWith("# of address != # of amounts");
+    
   })
 });

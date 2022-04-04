@@ -1,6 +1,7 @@
 import { ethers } from "hardhat";
 import { upgrades } from "hardhat";
 
+//This must be V1 contract address.
 const proxyAddress = '0x322813Fd9A801c5507c9de605d63CEA4f2CE6c44'
 
 async function main() {

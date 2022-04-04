@@ -214,5 +214,7 @@ npx hardhat run scripts/upgradeDeploy.ts --network rinkeby
 
 04/Apr/2022 : 
 Adding scripts/deploy_revise.ts, scripts/deployV2_revise.ts, contacts/multiTransactionV2.sol.
-Edit MultiTransaction.sol
+Edit MultiTransaction.sol not to inherit CPToken Contract and import ERC1967Proxy contract.
+
+
 
