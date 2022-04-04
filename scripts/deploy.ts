@@ -21,19 +21,19 @@ async function main() {
   await cpToken.deployed();
   console.log("cpToken deployed to:", cpToken.address);
 
-  //adding proxy contract
-  const Proxy = await ethers.getContractFactory("ERC1967Proxy");
-  console.log('Deploying ERC1967Proxy...');
-  let proxyContract = await Proxy.deploy(cpToken.address,"0x")
-  await proxyContract.deployed();
-  console.log("proxyContract deployed to:", proxyContract.address);
-
   // multi-transection contract
   const MultiTrans = await ethers.getContractFactory("MultiTransaction");
   console.log('Deploying multiTrans...');
   const multiTrans = await MultiTrans.deploy();
   await multiTrans.deployed();
   console.log("multiTrans deployed to:", multiTrans.address);
+
+  //adding proxy contract
+  const Proxy = await ethers.getContractFactory("ERC1967Proxy");
+  console.log('Deploying ERC1967Proxy...');
+  let proxyContract = await Proxy.deploy(multiTrans.address,"0x")
+  await proxyContract.deployed();
+  console.log("proxyContract deployed to:", proxyContract.address);
 
   // sleep is required as 
   // await sleep(40000);

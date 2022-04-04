@@ -7,8 +7,8 @@ import  "./cptoken.sol";
 
 contract MultiTransaction is Initializable, CPToken{ 
     event LogTokenBulkSent(address token, uint256 total);
-    // solhint-disable-next-line
     // In order to upgrade in the future. 
+    // solhint-disable-next-line
     function initialize() public initializer {}
     
     function multiTransfer(address _token, 
