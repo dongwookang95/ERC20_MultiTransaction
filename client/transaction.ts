@@ -6,7 +6,6 @@ import TRANSACTION_CONTRACT_ABI from '../artifacts/contracts/multiTransaction.so
 import TOKEN_CONTRACT_ABI from '../artifacts/contracts/cptoken.sol/CPToken.json';
 import * as dotenv from 'dotenv';
 
-
 dotenv.config();
 
 type TransactionInfo ={
@@ -45,6 +44,11 @@ function inputData(){
             //conversion from string to bigNumber.            
             //need to consider alternative way.
             let stringAmount = transactionRecord[i].amount;
+            //1. why is it unsafe and ?
+            //2. why did I use?
+                // - first approch -> from string to BigNumber.
+                // - second -> get the bigNumber directly.
+
             let dividor = 10000000000000000;
             let bigDecimals = BigNumber.from(10).pow(18);
             let parsedToEthUnit = BigNumber.from(stringAmount/dividor);
@@ -58,6 +62,8 @@ function inputData(){
 function _transaction(_receiverAddress:string[], _amount:BigNumber[]){
     const amountApprove:BigNumber = BigNumber.from(10).pow(21);
     const amountMint:BigNumber = BigNumber.from(15).pow(22);
+    // gas limit = G_transaction + G_txdatanonzero * dataByteLength
+    // G_transaction = 21000, G_txdatanonzero = 68
     const gaslimit:BigNumber = BigNumber.from(217880);
     (async function(){        
         await tokenContract.mint(SIGNER.address, amountMint)
