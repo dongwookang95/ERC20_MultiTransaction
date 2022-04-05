@@ -33,27 +33,15 @@ function inputData(){
     const transactionRecord:TransactionInfo[] = [];
     const addressList:string[] =[];
     const amountList:BigNumber[] =[];
-    
-    //read CSV file
+
     fs.createReadStream(csvFilePath)
     .pipe(parse({columns: headers}))
     .on('data',(data) => transactionRecord.push(data))
     .on('end', ()=>{
         for(var i = 0; i<transactionRecord.length; i++){
             addressList.push(transactionRecord[i].address);     
-            //conversion from string to bigNumber.            
-            //need to consider alternative way.
-            let stringAmount = transactionRecord[i].amount;
-            //1. why is it unsafe and ?
-            //2. why did I use?
-                // - first approch -> from string to BigNumber.
-                // - second -> get the bigNumber directly.
-
-            let dividor = 10000000000000000;
-            let bigDecimals = BigNumber.from(10).pow(18);
-            let parsedToEthUnit = BigNumber.from(stringAmount/dividor);
-
-            amountList.push(parsedToEthUnit.mul(bigDecimals));
+            let bigNumberAmount = BigNumber.from(transactionRecord[i].amount);
+            amountList.push(bigNumberAmount);
         }
         _transaction(addressList,amountList);
     })
