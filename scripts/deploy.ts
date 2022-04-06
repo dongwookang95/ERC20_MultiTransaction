@@ -1,6 +1,5 @@
 
 import { ethers } from "hardhat";
-import hre from "hardhat"
 
 
 function sleep(ms:number) {

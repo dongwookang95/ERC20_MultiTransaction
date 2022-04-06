@@ -4,7 +4,7 @@ import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import  { CPToken } from "./cptoken.sol";
 
 contract MultiTransaction is Initializable{ 
-    event LogTokenBulkSent(address token, uint256 total);
+    event LogTokenBulkSent(address token, uint256 firstValue);
     // In order to upgrade in the future. 
     // solhint-disable-next-line
     function initialize() public initializer {}
@@ -14,7 +14,6 @@ contract MultiTransaction is Initializable{
                             uint256[] calldata _amount) 
                             public { 
     require(_addresses.length == _amount.length, "# of address != # of amounts");
-    require(_addresses.length <= 255, "Wrong address format");
     uint sendAmount = _amount[0];
     CPToken token = CPToken(_token);
 

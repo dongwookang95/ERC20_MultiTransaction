@@ -36,8 +36,8 @@ describe("CPTokenTest", function () {
     const name = await cptoken.name();
     const symbol = await cptoken.symbol();
     const decimals = await cptoken.decimals();
-    expect(name).to.be.equal( 'CPToken');
-    expect(symbol).to.be.equal( 'CPT');
+    expect(name).to.be.equal('CPToken');
+    expect(symbol).to.be.equal('CPT');
     expect(decimals).to.be.equal( 18);
   });
 
@@ -114,6 +114,5 @@ describe("CPTokenTest", function () {
     const accArray = [acc2.address,acc3.address];
     const amtArray:BigNumber[] = [BigNumber.from('100000')]
     await expect( multiTrans.multiTransfer(cptoken.address,accArray, amtArray)).to.be.revertedWith("# of address != # of amounts");
-    
   })
 });

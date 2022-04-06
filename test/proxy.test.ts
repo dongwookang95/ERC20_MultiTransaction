@@ -9,7 +9,7 @@ chai.use(solidity);
 
 describe("ProxyTest", function () {
   //unable to use typechain as Contract object and typechain generated ABI(MultiTransaction)
-  // are not competible
+  //are not competible. 
   let cptoken: Contract;
   let multiTrans: Contract;
   let multiTransV2: Contract;
